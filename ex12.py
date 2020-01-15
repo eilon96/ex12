@@ -1,1 +1,1 @@
-"bitultorah"
+import _tkinter
