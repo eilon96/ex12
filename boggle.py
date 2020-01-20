@@ -9,14 +9,14 @@ class GameRunner:
     def __init__(self,filename):
 
         file = open(filename,"r")
-
         self.__dictionary  = file.read().split("\n")
         self.__board = randomize_board()
-        self.__screen = Screen_Boggle(self.__board)
         self.__points = 0
         self.__time = 0
         self.__founded_words_list = []
-        self.__last_button_pressed = None
+        file.close()
+
+
 
     """
 
