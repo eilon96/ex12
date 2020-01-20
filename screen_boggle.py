@@ -15,8 +15,6 @@ class Screen_Boggle:
         # here we need to add the label that will count the time
         # and the label thats represent the current string the player created
 
-
-
     def init_buttons(self,board):
 
         # creates the letter buttons - we will add letrter the binding with the event function
