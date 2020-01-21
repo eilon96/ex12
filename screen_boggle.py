@@ -64,16 +64,16 @@ class Screen_Boggle:
             button in self.__near_buttons[self.__pressed_buttons[-1]]):
             button.configure(bg = "red")
             self.__pressed_buttons.append(button) # add to the pressed list
-            self.__game_runner.__cur_guess += button.text
+            self.__game_runner.set_cur_guess(button.text)
         else:
             self.unpress_all()
 
     def guess_pressed(self):
         # הפונקציה צריכה לבדוק אם המחרוזת המנוחשת נמצאת במילון
         # אם כן לשנות את הניקוד בהתאם אם לא להדפיס הודעה שגיאה רלוונטית
-        if self.__game_runner.check_guess():
+        if self.__game_runner.is_word_in_dict():
             self.__game_runner.update_score()
-            self.update_score_board()
+            # self.update_score_board()
         self.unpress_all()
 
 
@@ -82,13 +82,10 @@ class Screen_Boggle:
         This method asks the user if she wants to quit, and if so,
          closes the window
         """
-        if tk.messagebox.askokcancel(EXIT_TITLE, EXIT_MESSAGE):
-            self.__root.destroy()
-
+        #
     def end_of_time(self):
-        # הפונקציה מטפלת במקרה והזמן נגמר
-        # הפונקציה תקושר לפונקציה after שמקבלת זמן ריצה ולאחריו מפעילה את הפונקציה הקשורה
-        # תדפיס הודעת שגיאה מתאימה וכו׳
+        pass
+
 
     def unpress_all(self):
         """

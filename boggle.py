@@ -27,6 +27,8 @@ class GameRunner:
 
     def get_dictionary(self):
         return self.__dictionary
+    def get_cur_guess(self):
+        return self.__cur_guess
     def get_board(self):
         return self.__board
     def get_points(self):
@@ -37,6 +39,8 @@ class GameRunner:
         return self.__founded_words_list
     def get_last_button_pressed(self):
         return self.__last_button_pressed
+    def set_cur_guess(self,letter):
+        self.__cur_guess += letter
 
     """
     all relevant set functions, the dictionary and board should not be changed 
@@ -88,14 +92,14 @@ class GameRunner:
         return True
 
 
-    def is_word_in_dict(self , word):
+    def is_word_in_dict(self):
         """
 
         :param dict: a list of words in the dictionary
         :param word: a word that the player guessed
         :return: if the word is in the dictionary the function returns True else it returns False
         """
-        return word in self.get_dictionary()
+        return self.__cur_guess in self.get_dictionary()
 
     def is_repeating_word(self,word):
         """
