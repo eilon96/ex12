@@ -27,7 +27,7 @@ class GameRunner:
     def get_dictionary(self):
         return self.__dictionary
     def get_board(self):
-        return self.get_board()
+        return self.__board
     def get_points(self):
         return self.__points
     def get_time(self):

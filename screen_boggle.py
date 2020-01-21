@@ -7,9 +7,12 @@ class Screen_Boggle:
     def __init__(self,filename):
 
         self._root = tk.Tk()
+        self._root.geometry("168x380")
+        self._root.resizable(0, 0)
         self._root.title("BEST BOGGLE GAME EVER")
         self.__game_runner = GameRunner(filename)
         self.init_buttons(self.__game_runner.get_board())
+        self.init_labels()
 
 
         # here we need to add the label that will count the time
@@ -32,45 +35,23 @@ class Screen_Boggle:
                 new_button.grid(row=row_index, column=letter_index)
 
         # creates the quit button and guess button
-        quit_button = tk.Button(self._root,text="Quit This Shity Game",font=("Courier", 30))     # צריך לשחק פה עם הגואי למקם את הכפתור
-        quit_button.grid(row=3,column=3)
-        guess_button = tk.Button(self._root,text="I think that's a word",font=("Courier", 30))  # צריך לשחק פה עם הגואי למקם את הכפתור
-        guess_button.grid(row=8,column=8)
+        quit_button = tk.Button(self._root, text="Quit", font=("Courier", 32), width=4)
+        quit_button.place(y=263)
+        Try_button = tk.Button(self._root, text="Try", font=("Courier", 32), width=4)
+        Try_button.place(x=84, y=263)
 
+    def init_labels(self):
+        self.__time_label = tk.Label(self._root, text="10:10", font=("Courier", 22), width=11, bg="black", fg="white")
+        self.__time_label.place(x=1, y=303)
+        self.__points_label = tk.Label(self._root, text="100", font=("Courier", 22), width=11, bg="white", fg="black")
+        self.__points_label.place(x=1, y=343)
+    def get_root(self):
+        return self._root
 
-    def letter_pressed(self,button):
-        # הפונקציה צריכה לממש את שלוש הפעולות הבאות:
-        # לבדוק אם המקש רציף אם הלחיצה הקודמת
-        # אם כן להמשיך את הרצף ולשנות את ערך המחרזות
-        # אם לא לשנות את המסך בהתאם ולהתחיל מחרוזת חדשה
-    def guess_pressed(self):
-        # הפונקציה צריכה לבדוק אם המחרוזת המנוחשת נמצאת במילון
-        # אם כן לשנות את הניקוד בהתאם אם לא להדפיס הודעה שגיאה רלוונטית
-    def quit_pressed(self):
-        # הפונקציה סוגרת את המשחק (או מדפיסת הודעה לברר ששואלת אם להתחיל מחדש או לפרוש)
-    def end_of_time(self):
-        # הפונקציה מטפלת במקרה והזמן נגמר
-        # הפונקציה תקושר לפונקציה after שמקבלת זמן ריצה ולאחריו מפעילה את הפונקציה הקשורה
-        # תדפיס הודעת שגיאה מתאימה וכו׳
 
 if __name__ == '__main__':
-
-    root = tk.Tk()
-    root.title("BEST BOGGLE GAME EVER")
-    randomize_board()
-    for row_index, row in enumerate(randomize_board()):
-        for letter_index, letter in enumerate(row):
-            if letter != "QU":
-                new_button = tk.Button(root, text=letter, font=("Courier", 30),
-                                       height=2, width=2)
-            else:
-                new_button = tk.Button(root, text=letter, font=("Courier", 30), height=2, width=2)
-
-            new_button.grid(row=row_index, column=letter_index)
-
-
-
-    root.mainloop()
+    screen = Screen_Boggle("boggle_dict.txt")
+    screen.get_root().mainloop()
 
 
 
