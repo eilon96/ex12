@@ -15,6 +15,7 @@ class GameRunner:
         self.__time = 0
         self.__founded_words_list = []
         self.__cur_guess = ""
+        self.__last_button_pressed = None
         file.close()
 
 
@@ -29,6 +30,8 @@ class GameRunner:
         return self.__dictionary
     def get_cur_guess(self):
         return self.__cur_guess
+    def get_score(self):
+        return self.__score
     def get_board(self):
         return self.__board
     def get_points(self):
@@ -40,7 +43,10 @@ class GameRunner:
     def get_last_button_pressed(self):
         return self.__last_button_pressed
     def set_cur_guess(self,letter):
-        self.__cur_guess += letter
+        if letter != "":
+            self.__cur_guess += letter
+        else:
+            self.__cur_guess = ""
 
     """
     all relevant set functions, the dictionary and board should not be changed 
@@ -85,7 +91,9 @@ class GameRunner:
         :param new_let_crd: a tuple representing the coordinate of the new letter that was picked
         :return: the function returns True if the player picked a legal letter and False if not
         """
-        if abs(self.get_last_button_pressed()[0]-new_letter_crd[0]) >= 2:
+        if self.__last_button_pressed == None:
+            return True
+        elif abs(self.get_last_button_pressed()[0]-new_letter_crd[0]) >= 2:
             return False
         elif abs(self.get_last_button_pressed()[1]-new_letter_crd[1]) >= 2:
             return False
