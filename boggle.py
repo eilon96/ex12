@@ -11,9 +11,10 @@ class GameRunner:
         file = open(filename,"r")
         self.__dictionary  = file.read().split("\n")
         self.__board = randomize_board()
-        self.__points = 0
+        self.__score = 0
         self.__time = 0
         self.__founded_words_list = []
+        self.__cur_guess = ""
         file.close()
 
 
@@ -105,4 +106,6 @@ class GameRunner:
         """
         return word in self.get_founded_words_list()
 
+    def update_score(self, guess_len):
+        self.__score += guess_len**2
 
