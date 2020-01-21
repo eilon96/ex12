@@ -48,6 +48,7 @@ class GameRunner:
         else:
             self.__cur_guess = ""
 
+
     """
     all relevant set functions, the dictionary and board should not be changed 
     so they do not have a set function 
@@ -66,13 +67,13 @@ class GameRunner:
         """
         self.__time += time
 
-    def add_founded_words_list(self,word):
+    def add_founded_words_list(self):
         """
 
-        :param word: a word that was found by the user
-        :return: adds the word to the founded words list
+        :return: the function adds the current guess to the founded word list
         """
-        self.__founded_words_list.append(word)
+
+        self.__founded_words_list.append(self.__cur_guess)
 
     def set_last_button_pressed(self,new_pressed_button):
         """
@@ -117,7 +118,23 @@ class GameRunner:
         :return: the function returns True if the word was already found and False otherwise
         """
         return word in self.get_founded_words_list()
+    def try_word(self):
+        """
+
+        :return: the function checks if the current guess is a good one and returns true if it is a good one and false
+        otherwise
+        """
+        if self.is_word_in_dict() and not self.is_repeating_word(self.__cur_guess):
+            self.add_founded_words_list()
+            return True
+        else:
+            return False
 
     def update_score(self):
         self.__score += len(self.__cur_guess)**2
+
+    def did_time_passed(self):
+        if self.__time > 60*3:
+            return True
+        return False
 

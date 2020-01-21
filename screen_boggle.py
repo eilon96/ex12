@@ -8,9 +8,9 @@ EXIT_MESSAGE = "Are you sure you want to quit?"
 
 class Screen_Boggle:
 
-    def __init__(self,filename):
+    def __init__(self,filename,root):
 
-        self._root = tk.Tk()
+        self._root = root
         self._root.geometry("168x380")
         self._root.resizable(0, 0)
         self._root.title("BEST BOGGLE GAME EVER")
@@ -18,10 +18,8 @@ class Screen_Boggle:
         self._pressed_buttons = []
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
+        self.update_time()
 
-
-        # here we need to add the label that will count the time
-        # and the label thats represent the current string the player created
 
     def init_buttons(self,board):
 
@@ -52,6 +50,7 @@ class Screen_Boggle:
         self.__time_label.place(x=1, y=303)
         self.__points_label = tk.Label(self._root, text="100", font=("Courier", 22), width=11, bg="white", fg="black")
         self.__points_label.place(x=1, y=343)
+        self.time_ended_label = tk.Message(self._root,text="zmancha avar")
 
     def get_root(self):
         return self._root
@@ -78,7 +77,7 @@ class Screen_Boggle:
     def guess_pressed(self):
         # הפונקציה צריכה לבדוק אם המחרוזת המנוחשת נמצאת במילון
         # אם כן לשנות את הניקוד בהתאם אם לא להדפיס הודעה שגיאה רלוונטית
-        if self.__game_runner.is_word_in_dict():
+        if self.__game_runner.try_word():
             self.__game_runner.update_score()
             self.__points_label.config(text=str(self.__game_runner.get_score()))
         self.unpress_all()
@@ -91,9 +90,17 @@ class Screen_Boggle:
          closes the window
         """
 
-    def end_of_time(self):
-        pass
+    def update_time(self):
+        self.__game_runner.set_time(10)
+        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
+        if not self.__game_runner.did_time_passed():
+            self._root.after(1000, self.update_time)
+        else:
+            self.end_of_time()
 
+    def end_of_time(self):
+        self.time_ended_label.pack()
+        self._root.destroy()
 
     def unpress_all(self):
         """
@@ -107,8 +114,9 @@ class Screen_Boggle:
         self.__game_runner.__cur_guess = ""
 
 if __name__ == '__main__':
-    screen = Screen_Boggle("boggle_dict.txt")
-    screen.get_root().mainloop()
+    root = tk.Tk()
+    screen = Screen_Boggle("boggle_dict.txt",root)
+    root.mainloop()
 
 
 
