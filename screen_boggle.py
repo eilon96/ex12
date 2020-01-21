@@ -5,7 +5,6 @@ from boggle import *
 EXIT_TITLE = "Please dont go"
 EXIT_MESSAGE = "Are you sure you want to quit?"
 
-
 class Screen_Boggle:
 
     def __init__(self,filename):
