@@ -2,6 +2,9 @@ import tkinter as tk
 from boggle_board_randomizer import *
 from boggle import *
 
+EXIT_TITLE = "Please dont go"
+EXIT_MESSAGE = "Are you sure you want to quit?"
+
 class Screen_Boggle:
 
     def __init__(self,filename):
@@ -75,7 +78,12 @@ class Screen_Boggle:
 
 
     def quit_pressed(self):
-        # הפונקציה סוגרת את המשחק (או מדפיסת הודעה לברר ששואלת אם להתחיל מחדש או לפרוש)
+        """
+        This method asks the user if she wants to quit, and if so,
+         closes the window
+        """
+        if tk.messagebox.askokcancel(EXIT_TITLE, EXIT_MESSAGE):
+            self.__root.destroy()
 
     def end_of_time(self):
         # הפונקציה מטפלת במקרה והזמן נגמר
