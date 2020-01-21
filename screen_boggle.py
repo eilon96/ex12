@@ -10,8 +10,6 @@ class Screen_Boggle:
         self._root.geometry("168x380")
         self._root.resizable(0, 0)
         self._root.title("BEST BOGGLE GAME EVER")
-        self.__root = tk.Tk()
-        self.__root.title("BEST BOGGLE GAME EVER")
         self.__game_runner = GameRunner(filename)
         self.init_buttons(self.__game_runner.get_board())
         self.__near_buttons = {}
