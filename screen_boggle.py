@@ -62,7 +62,7 @@ class Screen_Boggle:
         # הפונקציה צריכה לבדוק אם המחרוזת המנוחשת נמצאת במילון
         # אם כן לשנות את הניקוד בהתאם אם לא להדפיס הודעה שגיאה רלוונטית
         if self.__game_runner.check_guess():
-            self.__game_runner.update_score(len(self.guess_pressed()))
+            self.__game_runner.update_score()
             self.update_score_board()
         self.unpress_all()
 

@@ -106,6 +106,6 @@ class GameRunner:
         """
         return word in self.get_founded_words_list()
 
-    def update_score(self, guess_len):
-        self.__score += guess_len**2
+    def update_score(self):
+        self.__score += len(self.__cur_guess)**2
 
