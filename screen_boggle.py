@@ -4,6 +4,11 @@ from boggle import *
 
 EXIT_TITLE = "Please dont go"
 EXIT_MESSAGE = "Are you sure you want to quit?"
+LTRS_FNT_SZ = 30
+FUNCS_FNT_SZ = 32
+CMD_Y_PLACE = 263
+TRY_X_PLACE = 84
+
 
 
 class Screen_Boggle:
@@ -30,20 +35,20 @@ class Screen_Boggle:
             for letter_index, letter in enumerate(row):
 
                 if letter != "QU":
-                    new_button = tk.Button(self._root, text=letter, font=("Courier", 30),
+                    new_button = tk.Button(self._root, text=letter, font=("Courier", LTRS_FNT_SZ),
                                            height=2, width=2)
                     new_button.config(command=self.letter_pressed_event(new_button,letter,row_index,letter_index))
                 else:
-                    new_button = tk.Button(self._root, text=letter, font=("Courier", 30), height=2, width=2)
+                    new_button = tk.Button(self._root, text=letter, font=("Courier", LTRS_FNT_SZ), height=2, width=2)
                     new_button.config(command=self.letter_pressed_event(new_button,letter,row_index,letter_index))
 
                 new_button.grid(row=row_index, column=letter_index)
 
         # creates the quit button and guess button
-        quit_button = tk.Button(self._root, text="Quit", font=("Courier", 32), width=4)
-        quit_button.place(y=263)
-        Try_button = tk.Button(self._root, text="Try", font=("Courier", 32), width=4,command=self.guess_pressed)
-        Try_button.place(x=84, y=263)
+        quit_button = tk.Button(self._root, text="Quit", font=("Courier", FUNCS_FNT_SZ), width=4)
+        quit_button.place(y=CMD_Y_PLACE)
+        Try_button = tk.Button(self._root, text="Try", font=("Courier", FUNCS_FNT_SZ), width=4,command=self.guess_pressed)
+        Try_button.place(x=TRY_X_PLACE, y=CMD_Y_PLACE)
 
     def init_labels(self):
         self.__time_label = tk.Label(self._root, text="10:10", font=("Courier", 22), width=11, bg="black", fg="white")
@@ -91,7 +96,7 @@ class Screen_Boggle:
         """
 
     def update_time(self):
-        self.__game_runner.set_time(10)
+        self.__game_runner.set_time(1)
         self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
