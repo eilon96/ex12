@@ -10,11 +10,12 @@ class Screen_Boggle:
 
     def __init__(self,filename,root):
 
+        self.file = filename
         self._root = root
         self._root.geometry("168x380")
         self._root.resizable(0, 0)
         self._root.title("BEST BOGGLE GAME EVER")
-        self.__game_runner = GameRunner(filename)
+        self.__game_runner = GameRunner(self.file)
         self._pressed_buttons = []
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
@@ -40,7 +41,7 @@ class Screen_Boggle:
                 new_button.grid(row=row_index, column=letter_index)
 
         # creates the quit button and guess button
-        quit_button = tk.Button(self._root, text="Quit", font=("Courier", 32), width=4)
+        quit_button = tk.Button(self._root, text="Quit", font=("Courier", 32), width=4,command=self.quit_pressed)
         quit_button.place(y=263)
         Try_button = tk.Button(self._root, text="Try", font=("Courier", 32), width=4,command=self.guess_pressed)
         Try_button.place(x=84, y=263)
@@ -50,7 +51,7 @@ class Screen_Boggle:
         self.__time_label.place(x=1, y=303)
         self.__points_label = tk.Label(self._root, text="100", font=("Courier", 22), width=11, bg="white", fg="black")
         self.__points_label.place(x=1, y=343)
-        self.time_ended_label = tk.Message(self._root,text="zmancha avar")
+
 
     def get_root(self):
         return self._root
@@ -84,11 +85,13 @@ class Screen_Boggle:
         self.__game_runner.set_cur_guess("")
 
 
-    def quit_pressed(self):
+    def quit_pressed(self,other_root=None):
         """
         This method asks the user if she wants to quit, and if so,
          closes the window
         """
+        self.end_of_time.destroy()
+        self.get_root().destroy()
 
     def update_time(self):
         self.__game_runner.set_time(10)
@@ -96,11 +99,25 @@ class Screen_Boggle:
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
         else:
-            self.end_of_time()
+            self.end_of_time_func()
 
-    def end_of_time(self):
-        self.time_ended_label.pack()
-        self._root.destroy()
+    def end_of_time_func(self):
+
+        self.end_of_time = tk.Tk()
+        self.end_of_time.title("Your Time is Up")
+        self.end_of_time.geometry("200x100")
+        self.end_of_time.resizable(0, 0)
+        end_of_time_label = tk.Label(self.end_of_time,text="to continue press continue to \n"
+                                                      "quit well you know what to do... ")
+        end_of_time_label.pack()
+        quit_button = tk.Button(self.end_of_time, text="Quit", font=("Courier", 20), width=5,command=self.quit_pressed)
+        quit_button.place(x=10,y=50)
+        continue_button = tk.Button(self.end_of_time, text="continue", font=("Courier", 20), width=8,
+                                    command=self.continue_button_pressed)
+        continue_button.place(x=85,y=50)
+        self.end_of_time.mainloop()
+
+
 
     def unpress_all(self):
         """
@@ -112,6 +129,15 @@ class Screen_Boggle:
             self.__game_runner.set_last_button_pressed(None)
         self._pressed_buttons = []
         self.__game_runner.__cur_guess = ""
+
+    def continue_button_pressed(self):
+        self.end_of_time.destroy()
+        self.__game_runner = GameRunner(self.file)
+        self._pressed_buttons = []
+        self.init_buttons(self.__game_runner.get_board())
+        self.init_labels()
+        self.update_time()
+
 
 if __name__ == '__main__':
     root = tk.Tk()
