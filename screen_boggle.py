@@ -48,7 +48,7 @@ class Screen_Boggle:
         Try_button.place(x=84, y=263)
 
     def init_labels(self):
-        self.__time_label = tk.Label(self._root, text="10:10", font=("Courier", 22), width=12, bg="black", fg="white")
+        self.__time_label = tk.Label(self._root, text="00:00", font=("Courier", 22), width=12, bg="black", fg="white")
         self.__time_label.place(x=1, y=303)
         self.__points_label = tk.Label(self._root, text="0", font=("Courier", 22), width=11, bg="white", fg="black")
         self.__points_label.place(x=1, y=343)
@@ -56,11 +56,10 @@ class Screen_Boggle:
     def init_words_table(self):
         S = tk.Scrollbar(root)
         S.place(x=380, y=10)
-        self.__words_table = tk.Text(self._root, height=2, width=30, font=("Courier", 22), bg="white", fg="black")
-        self.__words_table.place(x=185, y=10)
-        S.config(command=self.__words_table.yview)
-        self.__words_table.config(yscrollcommand=S.set)
-        self.__words_table.insert(tk.END, "Guessed words: \n")
+        self.__words_table = tk.Label(self._root, height=16, width=15, font=("Courier", 22),
+                                      bg="white", fg="black",text="Guessed Words:\n",anchor="nw")
+        self.__words_table.place(x=180, y=10)
+
 
 
     def get_root(self):
@@ -94,8 +93,14 @@ class Screen_Boggle:
             if self.__game_runner.try_word():
                 self.__game_runner.update_score()
                 self.__points_label.config(text=str(self.__game_runner.get_score()))
+                self.add_word(self.__game_runner.get_cur_guess())
             self.unpress_all()
             self.__game_runner.set_cur_guess("")
+
+    def add_word(self,word):
+        text = self.__words_table.cget("text")
+        text += f"{word}\n"
+        self.__words_table.config(text=text)
 
 
     def quit_pressed(self,other_root=None):
@@ -111,10 +116,8 @@ class Screen_Boggle:
             self.get_root().destroy()
 
     def update_time(self):
-        self.__game_runner.set_time(0)
-        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:"
-                              f"{(self.__game_runner.get_time()%60)//10}"
-                              f"{(self.__game_runner.get_time()%60)%10}")
+        self.__game_runner.set_time(1)
+        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
         else:
