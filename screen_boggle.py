@@ -12,35 +12,30 @@ class Screen_Boggle:
 
         self.file = filename
         self._root = root
-        self._root.geometry("168x380")
-        self._root.resizable(0, 0)
+        self._root.geometry("400x380")
+        self._root.resizable(0,0)  # Unchangeable size
         self._root.title("BEST BOGGLE GAME EVER")
         self.__game_runner = GameRunner(self.file)
         self._pressed_buttons = []
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
+        self.init_words_table()
         self.update_time()
         self.disable=False
 
 
     def init_buttons(self,board):
 
-        # creates the letter buttons - we will add letrter the binding with the event function
+        # creates the letter buttons - we will add letter the binding with the
+        # event function
 
         for row_index, row in enumerate(board):
 
             for letter_index, letter in enumerate(row):
-
-                if letter != "QU":
-                    new_button = tk.Button(self._root, text=letter,
-                                      font=("Courier", 30),height=2, width=2)
-                    new_button.config(command=self.letter_pressed_event
-                    (new_button,letter,row_index,letter_index))
-                else:
-                    new_button = tk.Button(self._root, text=letter,
-                                    font=("Courier", 30), height=2, width=2)
-                    new_button.config(command=self.letter_pressed_event
-                    (new_button,letter,row_index,letter_index))
+                new_button = tk.Button(self._root, text=letter,
+                                font=("Courier", 30), height=2, width=2)
+                new_button.config(command=self.letter_pressed_event
+                (new_button,letter,row_index,letter_index))
 
                 new_button.grid(row=row_index, column=letter_index)
 
@@ -57,6 +52,15 @@ class Screen_Boggle:
         self.__time_label.place(x=1, y=303)
         self.__points_label = tk.Label(self._root, text="0", font=("Courier", 22), width=11, bg="white", fg="black")
         self.__points_label.place(x=1, y=343)
+
+    def init_words_table(self):
+        S = tk.Scrollbar(root)
+        S.place(x=380, y=10)
+        self.__words_table = tk.Text(self._root, height=2, width=30, font=("Courier", 22), bg="white", fg="black")
+        self.__words_table.place(x=185, y=10)
+        S.config(command=self.__words_table.yview)
+        self.__words_table.config(yscrollcommand=S.set)
+        self.__words_table.insert(tk.END, "Guessed words: \n")
 
 
     def get_root(self):
@@ -107,8 +111,10 @@ class Screen_Boggle:
             self.get_root().destroy()
 
     def update_time(self):
-        self.__game_runner.set_time(1)
-        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
+        self.__game_runner.set_time(0)
+        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:"
+                              f"{(self.__game_runner.get_time()%60)//10}"
+                              f"{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
         else:
