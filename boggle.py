@@ -12,7 +12,7 @@ class GameRunner:
         self.__dictionary  = file.read().split("\n")
         self.__board = randomize_board()
         self.__score = 0
-        self.__time = 0
+        self.__time = -1
         self.__founded_words_list = []
         self.__cur_guess = ""
         self.__last_button_pressed = None

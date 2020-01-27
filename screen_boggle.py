@@ -20,6 +20,7 @@ class Screen_Boggle:
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
         self.update_time()
+        self.disable=False
 
 
     def init_buttons(self,board):
@@ -47,9 +48,9 @@ class Screen_Boggle:
         Try_button.place(x=84, y=263)
 
     def init_labels(self):
-        self.__time_label = tk.Label(self._root, text="10:10", font=("Courier", 22), width=11, bg="black", fg="white")
+        self.__time_label = tk.Label(self._root, text="10:10", font=("Courier", 22), width=12, bg="black", fg="white")
         self.__time_label.place(x=1, y=303)
-        self.__points_label = tk.Label(self._root, text="100", font=("Courier", 22), width=11, bg="white", fg="black")
+        self.__points_label = tk.Label(self._root, text="0", font=("Courier", 22), width=11, bg="white", fg="black")
         self.__points_label.place(x=1, y=343)
 
 
@@ -63,14 +64,16 @@ class Screen_Boggle:
         # אם כן להמשיך את הרצף ולשנות את ערך המחרזות
         # אם לא לשנות את המסך בהתאם ולהתחיל מחרוזת חדשה
         # button hasn't pressed already,and it's a new guess or legal continue
+
         def letter_pressed():
-            if self.__game_runner.is_press_ok((row,column)):
-                button.config(fg="red")
-                self._pressed_buttons.append(button) # add to the pressed list
-                self.__game_runner.set_last_button_pressed((row,column))
-                self.__game_runner.set_cur_guess(letter)
-            else:
-                self.unpress_all()
+            if self.disable == False:
+                if self.__game_runner.is_press_ok((row,column)):
+                    button.config(fg="red")
+                    self._pressed_buttons.append(button) # add to the pressed list
+                    self.__game_runner.set_last_button_pressed((row,column))
+                    self.__game_runner.set_cur_guess(letter)
+                else:
+                    self.unpress_all()
 
         return letter_pressed
 
@@ -78,11 +81,12 @@ class Screen_Boggle:
     def guess_pressed(self):
         # הפונקציה צריכה לבדוק אם המחרוזת המנוחשת נמצאת במילון
         # אם כן לשנות את הניקוד בהתאם אם לא להדפיס הודעה שגיאה רלוונטית
-        if self.__game_runner.try_word():
-            self.__game_runner.update_score()
-            self.__points_label.config(text=str(self.__game_runner.get_score()))
-        self.unpress_all()
-        self.__game_runner.set_cur_guess("")
+        if self.disable == False:
+            if self.__game_runner.try_word():
+                self.__game_runner.update_score()
+                self.__points_label.config(text=str(self.__game_runner.get_score()))
+            self.unpress_all()
+            self.__game_runner.set_cur_guess("")
 
 
     def quit_pressed(self,other_root=None):
@@ -90,11 +94,15 @@ class Screen_Boggle:
         This method asks the user if she wants to quit, and if so,
          closes the window
         """
-        self.end_of_time.destroy()
-        self.get_root().destroy()
+        try:
+            self.end_of_time.destroy()
+        except AttributeError:
+            pass
+        finally:
+            self.get_root().destroy()
 
     def update_time(self):
-        self.__game_runner.set_time(10)
+        self.__game_runner.set_time(1)
         self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
@@ -102,7 +110,7 @@ class Screen_Boggle:
             self.end_of_time_func()
 
     def end_of_time_func(self):
-
+        self.disable=True
         self.end_of_time = tk.Tk()
         self.end_of_time.title("Your Time is Up")
         self.end_of_time.geometry("200x100")
@@ -137,6 +145,7 @@ class Screen_Boggle:
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
         self.update_time()
+        self.disable = False
 
 
 if __name__ == '__main__':
