@@ -22,6 +22,7 @@ class Screen_Boggle:
         self.init_words_table()
         self.update_time()
         self.disable=False
+        self.lst_button_pressed=[]
 
 
     def init_buttons(self,board):
@@ -56,9 +57,12 @@ class Screen_Boggle:
     def init_words_table(self):
         S = tk.Scrollbar(root)
         S.place(x=380, y=10)
-        self.__words_table = tk.Label(self._root, height=16, width=15, font=("Courier", 22),
+        self.__headline = tk.Label(self._root, height=2, width=15, font=("Courier", 22),
                                       bg="white", fg="black",text="Guessed Words:\n",anchor="nw")
-        self.__words_table.place(x=180, y=10)
+        self.__words_table = tk.Label(self._root, height=16, width=15, font=("Courier", 20),
+                                      bg="white", fg="black",anchor="nw")
+        self.__headline.place(x=180, y=10)
+        self.__words_table.place(x=180,y=40)
 
 
 
@@ -74,12 +78,13 @@ class Screen_Boggle:
         # button hasn't pressed already,and it's a new guess or legal continue
 
         def letter_pressed():
-            if self.disable == False:
+            if self.disable == False and button not in self.lst_button_pressed:
                 if self.__game_runner.is_press_ok((row,column)):
                     button.config(fg="red")
                     self._pressed_buttons.append(button) # add to the pressed list
                     self.__game_runner.set_last_button_pressed((row,column))
                     self.__game_runner.set_cur_guess(letter)
+                    self.lst_button_pressed.append(button)
                 else:
                     self.unpress_all()
 
@@ -117,7 +122,8 @@ class Screen_Boggle:
 
     def update_time(self):
         self.__game_runner.set_time(1)
-        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}{(self.__game_runner.get_time()%60)%10}")
+        self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}"
+                                      f"{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
             self._root.after(1000, self.update_time)
         else:
@@ -130,16 +136,16 @@ class Screen_Boggle:
         self.end_of_time.geometry("200x100")
         self.end_of_time.resizable(0, 0)
         end_of_time_label = tk.Label(self.end_of_time,
-                                text="to continue press continue to \n"
+                                text="to resart press restart to \n"
                                          "quit well you know what to do... ")
         end_of_time_label.pack()
         quit_button = tk.Button(self.end_of_time, text="Quit", font=("Courier",
                                         20), width=5,command=self.quit_pressed)
         quit_button.place(x=10,y=50)
-        continue_button = tk.Button(self.end_of_time, text="continue",
+        restart_button = tk.Button(self.end_of_time, text="restart",
                                     font=("Courier", 20), width=8,
-                                    command=self.continue_button_pressed)
-        continue_button.place(x=85,y=50)
+                                    command=self.restart_button_pressed)
+        restart_button.place(x=85,y=50)
         self.end_of_time.mainloop()
 
 
@@ -154,13 +160,15 @@ class Screen_Boggle:
             self.__game_runner.set_last_button_pressed(None)
         self._pressed_buttons = []
         self.__game_runner.__cur_guess = ""
+        self.lst_button_pressed = []
 
-    def continue_button_pressed(self):
+    def restart_button_pressed(self):
         self.end_of_time.destroy()
         self.__game_runner = GameRunner(self.file)
         self._pressed_buttons = []
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
+        self.init_words_table()
         self.update_time()
         self.disable = False
 

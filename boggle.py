@@ -115,7 +115,7 @@ class GameRunner:
         :param word: a word that the player guessed
         :return: if the word is in the dictionary the function returns True else it returns False
         """
-        return self.__cur_guess in self.get_dictionary()
+        return self.__cur_guess != "" and self.__cur_guess in self.get_dictionary()
 
     def is_repeating_word(self, word):
         """
@@ -133,7 +133,7 @@ class GameRunner:
         otherwise
         """
         if self.is_word_in_dict() and not self.is_repeating_word(
-                self.__cur_guess):
+                self.__cur_guess) :
             self.add_founded_words_list()
             return True
         else:
