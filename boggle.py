@@ -143,6 +143,6 @@ class GameRunner:
         self.__score += len(self.__cur_guess) ** 2
 
     def did_time_passed(self):
-        if self.__time > 60 * 3:
+        if self.__time > 60 * 3-1:
             return True
         return False
