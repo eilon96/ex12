@@ -4,7 +4,12 @@ from boggle import *
 
 EXIT_TITLE = "Please dont go"
 EXIT_MESSAGE = "Are you sure you want to quit?"
-
+WINDOW_SIZE = "400x380"
+GAME_TITLE = "BEST BOGGLE GAME EVER"
+START_LABEL = "Start Game"
+END_LABEL = "to resart press restart to \n" \
+                                         "quit well you know what to do... "
+LETTER_SIZE = 30
 
 class Screen_Boggle:
 
@@ -12,10 +17,11 @@ class Screen_Boggle:
 
         self.file = filename
         self._root = root
-        self._root.geometry("400x380")
+        self._root.geometry(WINDOW_SIZE)
         self._root.resizable(0,0)  # Unchangeable size
-        self._root.title("BEST BOGGLE GAME EVER")
+        self._root.title(GAME_TITLE)
         self.__game_runner = GameRunner(self.file)
+        self.start_button()
         self._pressed_buttons = []
         self.init_buttons(self.__game_runner.get_board())
         self.init_labels()
@@ -24,6 +30,16 @@ class Screen_Boggle:
         self.disable=False
         self.lst_button_pressed=[]
 
+    def start_button(self):
+        self.go = False
+        start_button = tk.Button(self._root, text=START_LABEL, font=("Courier", 32),
+                                width=20 ,command=self.start_game)
+        start_button.place(x = 100, y = 200)
+        while not self.go:
+            pass
+
+    def start_game(self):
+        self.go = True
 
     def init_buttons(self,board):
 
@@ -34,7 +50,7 @@ class Screen_Boggle:
 
             for letter_index, letter in enumerate(row):
                 new_button = tk.Button(self._root, text=letter,
-                                font=("Courier", 30), height=2, width=2)
+                            font=("Courier", LETTER_SIZE), height=2, width=2)
                 new_button.config(command=self.letter_pressed_event
                 (new_button,letter,row_index,letter_index))
 
@@ -121,7 +137,7 @@ class Screen_Boggle:
             self.get_root().destroy()
 
     def update_time(self):
-        self.__game_runner.set_time(1)
+        self.__game_runner.set_time(100)
         self.__time_label.config(text=f"0{self.__game_runner.get_time()//60}:{(self.__game_runner.get_time()%60)//10}"
                                       f"{(self.__game_runner.get_time()%60)%10}")
         if not self.__game_runner.did_time_passed():
@@ -133,11 +149,10 @@ class Screen_Boggle:
         self.disable=True
         self.end_of_time = tk.Tk()
         self.end_of_time.title("Your Time is Up")
-        self.end_of_time.geometry("200x100")
+        self.end_of_time.geometry("210x100")
         self.end_of_time.resizable(0, 0)
         end_of_time_label = tk.Label(self.end_of_time,
-                                text="to resart press restart to \n"
-                                         "quit well you know what to do... ")
+                                text = END_LABEL)
         end_of_time_label.pack()
         quit_button = tk.Button(self.end_of_time, text="Quit", font=("Courier",
                                         20), width=5,command=self.quit_pressed)
