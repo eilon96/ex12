@@ -64,6 +64,7 @@ class Screen_Boggle:
 
         self.__points_label.place(x=1, y=343)
 
+
     def init_words_table(self):
 
         self.__headline = tk.Label(self._root, height=2, width=15, font=("Courier", 22),
